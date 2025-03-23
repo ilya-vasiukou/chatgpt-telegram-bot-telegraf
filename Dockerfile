@@ -1,23 +1,17 @@
-# Use an official Node.js runtime as a parent image
-FROM node:20-slim AS production
+# Базовый образ Node.js версии 18
+FROM node:18
 
-# Set the working directory in the container to /app
-WORKDIR /app
+# Директория приложения в контейнере
+WORKDIR /usr/src/app
 
-# Copy package files first to leverage Docker cache
+# Копируем package.json и package-lock.json
 COPY package*.json ./
 
-# Install app dependencies
-RUN npm ci
+# Установка зависимостей
+RUN npm install
 
-# Copy the rest of the application
+# Копируем все остальные файлы проекта
 COPY . .
 
-# Run the prestart script before starting the application
-RUN npm run prestart
-
-# Your app binds to port 8080
-EXPOSE 8080
-
-# Define command to start your application
-CMD ["npm", "start"]
+# Команда запуска бота
+CMD ["npm", "run", "start"]
